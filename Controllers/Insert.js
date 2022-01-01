@@ -1,10 +1,13 @@
 const jwt=require('jsonwebtoken');
 const conn=require('../Models/connection.js');
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
+const bcrypt = require('bcryptjs');
+
 async function insertData(data,res){
     console.log(data);
-    var hash = await bcrypt.hashSync(data.password, saltRounds);
+    
+   var salt = bcrypt.genSaltSync(10);
+   var hash = bcrypt.hashSync(data.password, salt);
+    
     
     console.log(hash);
     console.log(data);

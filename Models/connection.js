@@ -1,11 +1,11 @@
 const {Client}=require('pg');
-
+const config=require('config');  
 const conn=new Client({
     host     : 'localhost',
-    user     : 'postgres',
-    port     :  5433,
-    password : 'CaptainZaltan',
-    database :  'Inventory'
+    user     : config.get('Database.usrname'),
+    port     :  config.get('Database.port'),
+    password : config.get('Database.password'),
+    database :  config.get('Database.name')
   });
   conn.connect((err)=> {
     if (err) {
