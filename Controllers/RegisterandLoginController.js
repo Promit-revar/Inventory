@@ -1,17 +1,17 @@
 const jwt=require('jsonwebtoken');
 const conn=require('../Models/connection.js');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 function insertData(){
     return async (req, res) => {
         var data=req.body;
     console.log(data);
     
-   var salt = bcrypt.genSaltSync(10);
-   var hash = bcrypt.hashSync(data.password, salt);
-    
-    
-    // console.log(hash);
+//    var salt = bcrypt.genSaltSync(10);
+//    var hash = bcrypt.hashSync(data.password, salt);
+bcrypt.hash(data.password, 10, function(err, hash) {
+    if (err) { throw (err); }
+     console.log(hash);
     // console.log(data);
     var queryString = `INSERT INTO "public"."User" ("Name", "EMPID", "Role", "Password", "Created_At", "Updated_At") VALUES ('${data.name}','${data.id}','${data.role}','${hash}','${data.created}','${data.updated}');`
     console.log(queryString);
@@ -27,15 +27,19 @@ function insertData(){
         }
         //conn.end;
       });
-      
+    });
 }
 }
 function login(){
     return async (req, res) => {
     var data=req.body;
     console.log(data);
+    
+    
+        
+   
     //var hash = await bcrypt.hash(data.password, saltRounds);
-    var queryString=`SELECT "EMPID","Password" FROM "public"."User" WHERE "EMPID"='${data.id}'`;
+     var queryString=`SELECT "EMPID","Password" FROM "public"."User" WHERE "EMPID"='${data.id}'`;
    
      conn.query(queryString, function (error, results) {
         
@@ -50,27 +54,34 @@ function login(){
         }
         else{
             var hash=results.rows[0].Password;
-        console.log(hash);
-        var ans= bcrypt.compareSync(data.password, hash);
-        console.log(ans);
-        if(ans){
-            const token = jwt.sign(                           
-                results.rows[0],
-                'secret'
-            );
-            res.status(200).send({success: true,
-                token: token,
-                data: results.rows[0]
-            });
-         }
-         else{
-            res.status(401).send({success:false, error:"Invalid Login.."}); 
-         }
+            
+            console.log(hash);
+            console.log(data.password);
+          
+        
+        bcrypt.compare(data.password, hash, function(err, ans) {
+            console.log(ans);
+            if(ans){
+                const token = jwt.sign(                           
+                    results.rows[0],
+                    'secret'
+                );
+                res.status(200).send({success: true,
+                    token: token,
+                    data: results.rows[0]
+                });
+             }
+             else{
+                res.status(401).send({success:false, error:"Invalid Login.."}); 
+             }
+          });
+        
+        
            
         }
         
         //conn.end;
-      });
+    });
     }
 }
 
