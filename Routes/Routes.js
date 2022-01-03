@@ -5,7 +5,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 const func=require('../Controllers/RegisterandLoginController.js');
 app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname +'/welcome.html'));
+    
+    res.sendFile(path.join(process.cwd() +'/Views/welcome.html'));
 });
 app.post('/register',func.Register());
 app.post('/login',func.login());
