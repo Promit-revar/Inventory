@@ -2,7 +2,7 @@
     "Database":{
         "port":"PORT",              
         "password":"DB_Password",
-        "usrname":"DB_Username"
+        "username":"DB_Username"
         
     }
 }
