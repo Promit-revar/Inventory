@@ -4,7 +4,7 @@
 
 ### clone the repository
 ```bash
-git clone 
+git clone https://github.com/Promit-revar/Inventory.git
 ```
 ### Install dependencies
 ```bash
@@ -14,4 +14,6 @@ npm install
 ```bash
 npm start
 ```
+### License
+[ISC](http://opensource.org/licenses/ISC)
 
